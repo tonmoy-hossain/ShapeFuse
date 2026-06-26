@@ -25,8 +25,29 @@ Set `REG_CKPT` (path to the checkpoint from step 1), `MODE`
 ```bash
 python train_classification.py
 ```
+## Testing
+
+Evaluate a trained classifier checkpoint on the test set:
+
+```bash
+python test_classifier.py --ckpt ./saved_clf_fusion_densenet/best_fusion_enc-densenet_query-gated.pth \
+                          --mode fusion --encoder densenet --reg_model baseline \
+                          --reg_ckpt .../baseline_best.pth --test_dir .../test
+```
+
+Arguments:
+- `--ckpt`      : trained classifier checkpoint (`.pth`)
+- `--mode`      : `shape` | `image` | `fusion`
+- `--encoder`   : `resnet` | `efficientnet` | `densenet` | `vit` | `vivit`
+- `--reg_model` : registration backbone — `baseline` | `tlrn`
+- `--reg_ckpt`  : registration checkpoint matching `--reg_model`
+- `--test_dir`  : path to test data (`test/{0,1}/*.mhd`)
+
+Reports Accuracy, Precision, Recall, F1, AUC, Sensitivity, and Specificity.
 
 ## Notes
-- TLRN model code: https://github.com/nellie689/TLRN
-  (place `tlrn_model.py` in the repo root)
-- ImageNet weights for the image encoders download automatically on first run.
+- **Registration backbones:** the `baseline` model is a VoxelMorph-style network. You can use the included `baseline_model.py`, or train the same model with the official VoxelMorph implementation: https://github.com/voxelmorph/voxelmorph
+- **TLRN:** for the `tlrn` registration backbone, refer to https://github.com/nellie689/TLRN and place `tlrn_model.py` in the repo root.
+- **Pretrained weights:** ImageNet weights for the image encoders download automatically on first run (cached to `./pretrained_weights/`).
+- **Config matching:** when testing, `--mode`, `--encoder`, `--reg_model`, and `--reg_ckpt` must match the configuration used to train the checkpoint.
+- **Data layout:** organize `.mhd` sequences (≥24 frames) as `train/{0,1}/*.mhd` and `test/{0,1}/*.mhd`.
