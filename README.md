@@ -25,3 +25,8 @@ Set `REG_CKPT` (path to the checkpoint from step 1), `MODE`
 ```bash
 python train_classification.py
 ```
+
+## Notes
+- TLRN model code: https://github.com/nellie689/TLRN
+  (place `tlrn_model.py` in the repo root)
+- ImageNet weights for the image encoders download automatically on first run.
