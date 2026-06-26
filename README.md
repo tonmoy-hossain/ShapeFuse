@@ -7,3 +7,21 @@ Deformable shape representations have proven to be robust complements to texture
 ```bash
 pip install torch torchvision timm SimpleITK scikit-learn numpy matplotlib tqdm
 ```
+
+Set the paths (`TRAIN_DIR`, `TEST_DIR`) at the top of the training scripts.
+
+## 1. Train the registration model (shape encoder)
+```bash
+python train_registration.py --model baseline   # VoxelMorph
+python train_registration.py --model tlrn        # TLRN
+```
+Produces a checkpoint in `./saved_models_<model>/`.
+
+## 2. Train the classifier
+Set `REG_CKPT` (path to the checkpoint from step 1), `MODE`
+(`shape` | `image` | `fusion`), and `ENCODER`
+(`resnet` | `efficientnet` | `densenet` | `vit` | `vivit`) in
+`train_classification.py`, then:
+```bash
+python train_classification.py
+```
